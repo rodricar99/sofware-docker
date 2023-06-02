@@ -1,0 +1,75 @@
+version: '3.8'
+services:
+  asientos:
+    build: ./asientos
+    ports:
+      - "8001:8001"
+    environment:
+      - DATABASE_URL=postgres://asientos:password@asientos-db:5432/asientos
+    depends_on:
+      - asientos-db
+      - rabbitmq
+
+  asientos-db:
+    image: postgres
+    environment:
+      - POSTGRES_USER=asientos
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=asientos
+
+  notificacion:
+    build: ./notificacion
+    ports:
+      - "8002:8002"
+    environment:
+      - DATABASE_URL=postgres://notificacion:password@notificacion-db:5432/notificacion
+    depends_on:
+      - notificacion-db
+      - rabbitmq
+
+  notificacion-db:
+    image: postgres
+    environment:
+      - POSTGRES_USER=notificacion
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=notificacion
+
+  orden:
+    build: ./orden
+    ports:
+      - "8003:8003"
+    environment:
+      - DATABASE_URL=postgres://orden:password@orden-db:5432/orden
+    depends_on:
+      - orden-db
+      - rabbitmq
+
+  orden-db:
+    image: postgres
+    environment:
+      - POSTGRES_USER=orden
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=orden
+
+  pago:
+    build: ./pago
+    ports:
+      - "8004:8004"
+    environment:
+      - DATABASE_URL=postgres://pago:password@pago-db:5432/pago
+    depends_on:
+      - pago-db
+      - rabbitmq
+
+  pago-db:
+    image: postgres
+    environment:
+      - POSTGRES_USER=pago
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=pago
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "15672:15672"
+      - "5672:5672"
